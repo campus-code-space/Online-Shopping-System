@@ -16,7 +16,16 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('verified_email')->default(false);
+            $table->string('phone_number')->unique();
+            $table->boolean('verified_phone_number')->default(false);
             $table->string('password');
+            $table->string('role'); // customer, vendor, admin, delivery_agent
+            $table->string('address')->nullable();
+            $table->string('fayda_number')->nullable();
+            $table->BLOB('profile_image')->nullable();
+            $table->BLOB('identity_card_image')->nullable();
+            $table->string('delivery_mode')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

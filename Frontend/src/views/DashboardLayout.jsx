@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Settings, Tag, MapPin, Bell, ShoppingCart, Search, Package } from 'lucide-react';
-
+import Data from '../../Data.json'
+import { cartContext } from '../context/contextProvider';
+cartContext
 export default function DashboardLayout() {
+  const [products,setproducts]= useState(Data.products)
+  const {dispatch} = useContext(cartContext);
+  const {cart} = useContext(cartContext)
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -64,10 +69,10 @@ export default function DashboardLayout() {
                 <Bell className="w-6 h-6" />
                 <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
-              <button className="relative p-2 hover:bg-gray-100 rounded-full">
+              <Link to="/CartPage"className="relative p-2 hover:bg-gray-100 rounded-full">
                 <ShoppingCart className="w-6 h-6" />
-                <span className="absolute top-0 right-0 w-5 h-5 bg-green-500 text-white text-xs flex items-center justify-center rounded-full">2</span>
-              </button>
+                <span className="absolute top-0 right-0 w-5 h-5 bg-green-500 text-white text-xs flex items-center justify-center rounded-full">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+              </Link>
             </div>
           </div>
 
@@ -89,15 +94,15 @@ export default function DashboardLayout() {
         <div className="p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {/* Sample Product Cards */}
-            {[1, 2, 3, 4, 5, 6, 8].map((item) => (
-              <div key={item} className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {products.map(item => (
+              <div  className="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div className="h-48 bg-gray-200"></div>
                 <div className="p-4">
-                  <h3 className="font-medium">Product Name</h3>
+                  <h3 className="font-medium">{item.title}</h3>
                   <p className="text-sm text-gray-500 mb-2">Category</p>
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-green-600">$4.99</span>
-                    <button className="bg-green-600 text-white px-3 py-1 rounded-full text-sm hover:bg-green-700">
+                    <span className="font-bold text-green-600">${item.price}</span>
+                    <button className="bg-green-600 text-white px-3 py-1 rounded-full text-sm hover:bg-green-700" onClick={()=> dispatch({type: "Add",item})}>
                       Add to Cart
                     </button>
                   </div>

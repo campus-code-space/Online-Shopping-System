@@ -6,6 +6,7 @@ import Register from './views/Register';
 import DashboardLayout from './views/DashboardLayout';
 import DiscountPage from './views/DiscountPage'
 import BulkSubscription from './views/BulkSubscription'
+import CartPage from "./views/CartPage";
   
       
 const router = createBrowserRouter(  [
@@ -32,6 +33,10 @@ const router = createBrowserRouter(  [
     {
         path:"/bulkSubscription",
         element:<BulkSubscription />
+    },
+    {
+        path:"/CartPage",
+        element:<CartPage/>
     }
 ])
 export default router;

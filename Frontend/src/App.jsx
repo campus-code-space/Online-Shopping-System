@@ -1,11 +1,11 @@
 import React from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { ShoppingBasket, LogIn, UserPlus } from 'lucide-react';
-import SignIn from './components/SignIn';
-import Register from './components/Register';
-import DashboardLayout from './components/DashboardLayout';
-import DiscountPage from './components/DiscountPage'
-import BulkSubscription from './components/BulkSubscription'
+import SignIn from './views/SignIn';
+import Register from './views/Register';
+import DashboardLayout from './views/DashboardLayout';
+import DiscountPage from './views/DiscountPage'
+import BulkSubscription from './views/BulkSubscription'
 
 function App() {
   const navigate = useNavigate();

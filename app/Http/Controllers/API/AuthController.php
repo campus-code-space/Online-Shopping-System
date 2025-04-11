@@ -21,9 +21,9 @@ class AuthController extends Controller
                 "name"=>"required|string",
                 "email"=>"required|email",
                 "password"=>"required|string",
-                'phone_number'=>"required|string", 
-                'verified_phone_number'=>"required|boolean", 
                 'role'=>"required|string",
+                'phone_number'=>"required|string", 
+                // 'verified_phone_number'=>"required|boolean", 
                 // 'address'=>"string",
                 // 'fayda_number'=>"string",
                 // 'profile_image'=>"string",
@@ -45,13 +45,15 @@ class AuthController extends Controller
                     "name"=>$request->name,
                     "email"=>$request->email,
                     "password"=>bcrypt($request->password),
+                    'role'=>$request->role,
                     'phone_number'=>$request->phone_number, 
-                    'verified_phone_number'=>$request->verified_phone_number, 
-                    'role'=>$request->role
+                    // 'verified_phone_number'=>$request->verified_phone_number, 
              ]);
 
              $response=[];
-             $token = $user->createToken("My_App",["admin"])->plainTextToken;
+             $token = $user->createToken("My_App",[$user->role])->plainTextToken;
+             //gives the token ability with specific role
+
              $response["token"] = $token;
              $response["name"] = $user->name; 
              $response["email"] = $user->email; 
@@ -70,16 +72,12 @@ class AuthController extends Controller
             $user = Auth::user();
             
             
-            if($user->tokenCan('admin')){
-                return "HJhjjlkjlk";
-            }
+            // if($user->tokenCan('admin')){
+            //     return "HJhjjlkjlk";
+            // }
             // dd(Auth::user()->currentAccessToken());
 
-            if($user->tokenCan('server:update')){
-                return response()->json([
-                    "msg"=>"you asshole u got it "
-                ]);
-            }
+            
            
             $response = [];
 
@@ -87,6 +85,7 @@ class AuthController extends Controller
             $response["email"]= $user->email;
             $response["token"]= $user->createToken('My_app')->plainTextToken;
 
+            
             return response()->json([
                 "status"=>1,
                 "message"=>"user registered successfully",

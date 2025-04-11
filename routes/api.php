@@ -22,8 +22,8 @@ use App\Http\Controllers\API\ProductController;
 
 // Route::middleware([]'ability']);
 
-
+  
 Route::get('/order',function(){
          return "This is some order for user";
 
-})->middleware(['auth:sanctum','ability:user']);
+})->middleware(['auth:sanctum','ability:User']);

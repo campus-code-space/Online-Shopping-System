@@ -1,19 +1,42 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import axios from 'axios';
 
-export default function Register() {
+export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone_number: '',
+    verfied_phone_no: '',
+    role: "User"
+  });
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // In a real app, you would create the account here
+    try {
+      let response = await axios.post('http://localhost:8000/api/register',userData);
+      console.log(response);
+    }catch(e){
+      console.log(e);
+    }
+    
     navigate('/dashboard');
   };
-
+  const handleChange = (e) => {
+    setUserData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value }
+    })
+  }
+  console.log(userData);
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -44,8 +67,8 @@ export default function Register() {
                   type="text"
                   autoComplete="name"
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={userData.name}
+                  onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
               </div>
@@ -62,8 +85,8 @@ export default function Register() {
                   type="email"
                   autoComplete="email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={userData.email}
+                  onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
               </div>
@@ -80,10 +103,39 @@ export default function Register() {
                   type="password"
                   autoComplete="new-password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={userData.password}
+                  onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="phonenumber" className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <div className="mt-1">
+                <input
+                  id="phonenumber"
+                  name="phone_number"
+                  type="text"
+                  required
+                  value={userData.phone_number}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Role
+              </label>
+              <div className="mt-1">
+                <select name="role" id="role" onChange={handleChange}>
+                  <option  value='User'>User</option>
+                  <option  value='Admin'>Admin</option>
+                  <option  value='Vendor'>Vendor</option>
+                  <option  value='Biker'>Biker</option>
+                </select>
               </div>
             </div>
 

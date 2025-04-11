@@ -24,11 +24,11 @@ class AuthController extends Controller
                 'phone_number'=>"required|string", 
                 'verified_phone_number'=>"required|boolean", 
                 'role'=>"required|string",
-                'address'=>"string",
-                'fayda_number'=>"string",
-                'profile_image'=>"string",
-                'identity_card_image'=>"string", 
-                'delivery_mode'=>"string"
+                // 'address'=>"string",
+                // 'fayda_number'=>"string",
+                // 'profile_image'=>"string",
+                // 'identity_card_image'=>"string", 
+                // 'delivery_mode'=>"string"
              ]);
 
              if($validator->fails()){
@@ -51,22 +51,36 @@ class AuthController extends Controller
              ]);
 
              $response=[];
-             $response["token"] = $user->createToken("My_App")->plainTextToken;
+             $token = $user->createToken("My_App",["admin"])->plainTextToken;
+             $response["token"] = $token;
              $response["name"] = $user->name; 
              $response["email"] = $user->email; 
 
-
-            return response()->json([
-                "status"=>1,
-                "message"=>"user registered successfully",
-                "data"=>$response
-            ]);
+   
+                 return response()->json([
+                     "status"=>1,
+                     "message"=>"user registered successfully",
+                     "data"=>$response
+                    ]);
     }
 
     public function login(Request $request){
+
         if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
             $user = Auth::user();
+            
+            
+            if($user->tokenCan('admin')){
+                return "HJhjjlkjlk";
+            }
+            // dd(Auth::user()->currentAccessToken());
 
+            if($user->tokenCan('server:update')){
+                return response()->json([
+                    "msg"=>"you asshole u got it "
+                ]);
+            }
+           
             $response = [];
 
             $response["name"]= $user->name;

@@ -15,6 +15,15 @@ use App\Http\Controllers\API\ProductController;
  Route::post('/register',[AuthController::class,'register']);
  Route::post('/login',[AuthController::class,'login']);
 
- Route::middleware("auth:sanctum")->group(function(){
-    Route::resource('product',ProductController::class);
+ 
+ Route::middleware(['auth:sanctum','ability:admin'])->group(function(){
+    Route::get('/product',[ProductController::class,'index']);
 });
+
+// Route::middleware([]'ability']);
+
+
+Route::get('/order',function(){
+         return "This is some order for user";
+
+})->middleware(['auth:sanctum','ability:user']);

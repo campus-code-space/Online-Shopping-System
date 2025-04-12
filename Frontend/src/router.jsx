@@ -7,9 +7,10 @@ import DashboardLayout from './views/DashboardLayout';
 import DiscountPage from './views/DiscountPage'
 import BulkSubscription from './views/BulkSubscription'
 import CartPage from "./views/CartPage";
+import Unauthorized from "./views/Unauthorized";
   
       
-const router = createBrowserRouter(  [
+const router = createBrowserRouter( [
     {
         path: '/',
         element: <Home/>
@@ -37,6 +38,10 @@ const router = createBrowserRouter(  [
     {
         path:"/CartPage",
         element:<CartPage/>
-    }
+    },
+    {
+        path:"/unauthorized",
+        element:<Unauthorized/>
+    },
 ])
 export default router;

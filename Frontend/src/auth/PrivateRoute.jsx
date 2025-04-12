@@ -1,18 +1,17 @@
 import React from 'react'
 import { getUserRole } from './auth';
-import { Redirect, Route } from 'react-router-dom';
-function PrivateRoute({element:Component,allowedRoles,...rest}) {
+import { Navigate } from 'react-router-dom';
+function PrivateRoute({Component,allowedRoles}) {
 
     const userrole = getUserRole();
     
-  return (
-    <Route
-        {...rest}
-        render={(props)=>
-                (allowedRoles.includes(userrole))?<Component {...props}/>:<Redirect to='/unauthorized'/>
-        }
-    />
-  )
+    if(allowedRoles.includes(userrole)){
+      return <Component/>
+      }else{
+        
+      return <Navigate to='/unauthorized' replace/>
+    }
+  
 }
 
 export default PrivateRoute

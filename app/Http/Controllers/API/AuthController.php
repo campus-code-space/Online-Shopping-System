@@ -76,16 +76,14 @@ class AuthController extends Controller
             // if($user->tokenCan('admin')){
             //     return "HJhjjlkjlk";
             // }
-            // dd(Auth::user()->currentAccessToken());
-
-            
+            // dd(Auth::user()->currentAccessToken());   
            
             $response = [];
 
             $response["name"]= $user->name;
             $response["email"]= $user->email;
             //checkout the token ability how ur gonna solve that
-            $response["token"]= $user->createToken('My_app')->plainTextToken;
+            $response["token"]= $user->createToken('My_app',[$user->role])->plainTextToken;
             $response["role"]= $user->role;
 
             

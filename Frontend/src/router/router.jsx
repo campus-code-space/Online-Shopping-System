@@ -1,15 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import React from 'react';
-import Home from "./views/Home";
-import SignIn from './views/SignIn';
-import Register from './views/Register';
-import DashboardLayout from './views/DashboardLayout';
-import DiscountPage from './views/DiscountPage'
-import BulkSubscription from './views/BulkSubscription'
-import CartPage from "./views/CartPage";
-import Unauthorized from "./views/Unauthorized";
-import Signup from "./views/Signup";
-  
+import Home from "../views/Home";
+import SignIn from '../views/SignIn';
+import Register from '../views/Register';
+import DashboardLayout from '../views/DashboardLayout';
+import DiscountPage from '../views/DiscountPage'
+import BulkSubscription from '../views/BulkSubscription'
+import CartPage from "../views/CartPage";
+import Unauthorized from "../views/Unauthorized";
+import Signup from "../views/Signup";
+import PrivateRoute from "../auth/PrivateRoute";
       
 const router = createBrowserRouter( [
     {
@@ -26,7 +26,7 @@ const router = createBrowserRouter( [
     },    
     {
         path:"/dashboard",
-        element:<DashboardLayout />
+        element:<PrivateRoute Component={DashboardLayout} allowedRoles={['User']}/>
     },    
     {
         path:"/discounts",

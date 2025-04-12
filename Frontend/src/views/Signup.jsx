@@ -25,13 +25,12 @@ export default function Signup() {
       let response = await axios.post('http://localhost:8000/api/register',userData);
       console.log(response);
       console.log(JSON.stringify(response.data.userdata));
-      localStorage.removeItem('hello',"mama");
       localStorage.setItem('userdata',`${JSON.stringify(response.data.userdata)}`);
     }catch(e){
       console.log(e);
     }
     
-    navigate('/dashboard');
+    navigate('/signin');
   };
   const handleChange = (e) => {
     setUserData((prev) => {

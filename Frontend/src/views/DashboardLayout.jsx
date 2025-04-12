@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import { Settings, Tag, MapPin, Bell, ShoppingCart, Search, Package } from 'lucide-react';
 import Data from '../../Data.json'
 import { cartContext } from '../context/contextProvider';
-cartContext
+import { getUserRole } from '../auth/auth';
 export default function DashboardLayout() {
   const [products,setproducts]= useState(Data.products)
   const {dispatch} = useContext(cartContext);
-  const {cart} = useContext(cartContext)
+  const {cart} = useContext(cartContext);
+
+  const role = getUserRole();
+  console.log(role);
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -94,8 +97,8 @@ export default function DashboardLayout() {
         <div className="p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {/* Sample Product Cards */}
-            {products.map(item => (
-              <div  className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {products.map((item ,index)=> (
+              <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div className="h-48 bg-gray-200"></div>
                 <div className="p-4">
                   <h3 className="font-medium">{item.title}</h3>

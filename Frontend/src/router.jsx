@@ -8,6 +8,7 @@ import DiscountPage from './views/DiscountPage'
 import BulkSubscription from './views/BulkSubscription'
 import CartPage from "./views/CartPage";
 import Unauthorized from "./views/Unauthorized";
+import Signup from "./views/Signup";
   
       
 const router = createBrowserRouter( [
@@ -20,8 +21,8 @@ const router = createBrowserRouter( [
         element:<SignIn />
     },
     {
-        path:"/register",
-        element:<Register />
+        path:"/signup",
+        element:<Signup />
     },    
     {
         path:"/dashboard",

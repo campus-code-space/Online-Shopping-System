@@ -18,13 +18,15 @@ export default function Signup() {
   });
 
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // In a real app, you would create the account here
     try {
       let response = await axios.post('http://localhost:8000/api/register',userData);
       console.log(response);
+      console.log(JSON.stringify(response.data.userdata));
+      localStorage.removeItem('hello',"mama");
+      localStorage.setItem('userdata',`${JSON.stringify(response.data.userdata)}`);
     }catch(e){
       console.log(e);
     }

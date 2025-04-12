@@ -37,7 +37,7 @@ export default function Home() {
               <span>Sign In</span>
             </button>
             <button 
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/signup')}
               className="flex items-center space-x-1 bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors"
             >
               <UserPlus size={20} />

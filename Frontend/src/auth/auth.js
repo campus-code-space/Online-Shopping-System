@@ -1,13 +1,14 @@
 
-let userdata = localStorage.getItem('userdata');
-const getUserRole = ()=>{
+let userdata = JSON.parse(localStorage.getItem('userdata'));
+
+export const getUserRole = ()=>{
     let role = null;
     return (userdata['role'])?userdata['role']:role;
 }
 
-const getUserToken = ()=>{
+export const getUserToken = ()=>{
     let token = null;
     return (userdata['token'])?userdata['token']:token;
 }
 
-module.exports = {getUserRole,getUserToken};
+// module.exports = {getUserRole,getUserToken};

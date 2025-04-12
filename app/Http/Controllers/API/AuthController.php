@@ -57,12 +57,13 @@ class AuthController extends Controller
              $response["token"] = $token;
              $response["name"] = $user->name; 
              $response["email"] = $user->email; 
+             $response["role"] = $user->role; 
 
    
                  return response()->json([
                      "status"=>1,
                      "message"=>"user registered successfully",
-                     "data"=>$response
+                     "userdata"=>$response
                     ]);
     }
 
@@ -83,13 +84,15 @@ class AuthController extends Controller
 
             $response["name"]= $user->name;
             $response["email"]= $user->email;
+            //checkout the token ability how ur gonna solve that
             $response["token"]= $user->createToken('My_app')->plainTextToken;
+            $response["role"]= $user->role;
 
             
             return response()->json([
                 "status"=>1,
                 "message"=>"user registered successfully",
-                "data"=>$response
+                "userdata"=>$response
             ]);
         }
 

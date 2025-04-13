@@ -1,37 +1,67 @@
 import React, { useState } from 'react';
+import { ToastContainer ,toast} from "react-toastify";
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 export default function SignIn() {
 
   const [userData, setUserData] = useState({
-    email:"",
-    password:"",
+    email: "",
+    password: "",
   });
   const navigate = useNavigate();
-  const handleChange = (e)=>{
+  const handleChange = (e) => {
 
-    setUserData((prev)=>{
-      return {...prev,[e.target.name]:e.target.value}
+    setUserData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value }
     })
   }
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // validate credentials here
-    try{
-      let response = await axios.post('http://localhost:8000/api/login',userData);
+    try {
+      let response = await axios.post('http://localhost:8000/api/login', userData);
       console.log(response);
-      console.log(JSON.stringify(response.data.userdata));
-      localStorage.setItem('userdata',`${JSON.stringify(response.data.userdata)}`);
-      navigate('/dashboard');
+      console.log(JSON.stringify(response.data));
+      if (response.data.status) {
 
-    }catch(err){
+        localStorage.setItem('userdata', `${JSON.stringify(response.data.data)}`);
+        toast.success(`${response.data.message}`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        setTimeout(() => {
+          //after 2 seconds navigate to dashboard
+          navigate('/dashboard');
+        }, 2000);
+
+      } else {
+        toast.error(`${response.data.message}`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (err) {
       console.log(err);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <ToastContainer/>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link to="/" className="flex items-center text-green-600 hover:text-green-700 mb-6 mx-4">
           <ArrowLeft className="h-5 w-5 mr-2" />

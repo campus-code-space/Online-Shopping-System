@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer  , toast} from "react-toastify";
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 
@@ -23,14 +24,40 @@ export default function Signup() {
     // In a real app, you would create the account here
     try {
       let response = await axios.post('http://localhost:8000/api/register',userData);
-      console.log(response);
-      console.log(JSON.stringify(response.data.userdata));
-      localStorage.setItem('userdata',`${JSON.stringify(response.data.userdata)}`);
+      console.log(JSON.stringify(response.data));
+      if(response.data.status){
+
+        localStorage.setItem('userdata',`${JSON.stringify(response.data)}`);
+
+        toast.success(`${response.data.message}`,{
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+          setTimeout(() => {
+            navigate('/signin');
+          }, 2000);
+      }else{
+        toast.error(`${response.data.message}`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      }
     }catch(e){
       console.log(e);
     }
     
-    navigate('/signin');
   };
   const handleChange = (e) => {
     setUserData((prev) => {
@@ -40,6 +67,7 @@ export default function Signup() {
   console.log(userData);
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <ToastContainer/>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link to="/" className="flex items-center text-green-600 hover:text-green-700 mb-6 mx-4">
           <ArrowLeft className="h-5 w-5 mr-2" />

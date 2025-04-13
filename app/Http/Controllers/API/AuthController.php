@@ -32,13 +32,33 @@ class AuthController extends Controller
              ]);
 
              if($validator->fails()){
-
+                //fix correct validation response
                 return response()->json([
                     "status"=>0,
                     "message"=>"Validation error",
                     "data"=>$validator->errors()->all()
                 ]);
              }
+
+             //checking if user duplicate exists
+             $duplicateEmail = User::where('email',$request->email)->first();
+             $duplicatePhone = User::where('phone_number',$request->phone_number)->first();
+             //check duplicate for faydanumber and other for future
+
+             if($duplicateEmail!=null){
+                 return response()->json([
+                     "status"=>0,
+                     "message"=>"User Has Already Registered Please use another email"
+                 ]);
+             }
+             if($duplicatePhone!=null){
+                return response()->json([
+                    "status"=>0,
+                    "message"=>"User Registered Please use another phone number"
+                ]);
+            }
+
+             
 
              //Full Schema is not finished its for dev purpose
              $user = User::create([
@@ -62,8 +82,8 @@ class AuthController extends Controller
    
                  return response()->json([
                      "status"=>1,
-                     "message"=>"user registered successfully",
-                     "userdata"=>$response
+                     "message"=>"You have registered successfully",
+                     "data"=>$response
                     ]);
     }
 
@@ -89,15 +109,14 @@ class AuthController extends Controller
             
             return response()->json([
                 "status"=>1,
-                "message"=>"user registered successfully",
-                "userdata"=>$response
+                "message"=>"Logged in successfully",
+                "data"=>$response
             ]);
         }
 
             return response()->json([
                 "status"=>0,
-                "message"=>"user Authentication Error",
-                "data"=>null
+                "message"=>"Incorrect password or email",
             ]);
         
     }

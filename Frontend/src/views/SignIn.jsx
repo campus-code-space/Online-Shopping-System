@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-
+import axios from 'axios';
 export default function SignIn() {
-  
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [userData, setUserData] = useState({
+    email:"",
+    password:"",
+  });
+  const navigate = useNavigate();
+  const handleChange = (e)=>{
+
+    setUserData((prev)=>{
+      return {...prev,[e.target.name]:e.target.value}
+    })
+  }
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // In a real app, you would validate credentials here
-    navigate('/dashboard');
+    // validate credentials here
+    try{
+      let response = await axios.post('http://localhost:8000/api/login',userData);
+      console.log(response);
+      console.log(JSON.stringify(response.data.userdata));
+      localStorage.setItem('userdata',`${JSON.stringify(response.data.userdata)}`);
+      navigate('/dashboard');
+
+    }catch(err){
+      console.log(err);
+    }
   };
 
   return (
@@ -44,8 +60,8 @@ export default function SignIn() {
                   type="email"
                   autoComplete="email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={userData.email}
+                  onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
               </div>
@@ -62,8 +78,8 @@ export default function SignIn() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={userData.password}
+                  onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
               </div>

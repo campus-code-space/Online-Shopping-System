@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { ShoppingBasket, LogIn, UserPlus } from 'lucide-react';
 import SignIn from './views/SignIn';
-import Register from './views/Register';
 import DashboardLayout from './views/DashboardLayout';
 import DiscountPage from './views/DiscountPage'
 import BulkSubscription from './views/BulkSubscription'
@@ -13,7 +12,7 @@ function App() {
   return (
     <Routes>
       <Route path="/signin" element={<SignIn />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/signup" element={<Signup/>} />
       <Route path="/dashboard" element={<DashboardLayout />} />
       <Route path="/discounts" element={<DiscountPage />} />
       <Route path="/bulkSubscription" element={<BulkSubscription />} />
@@ -36,7 +35,7 @@ function App() {
                   <span>Sign In</span>
                 </button>
                 <button 
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/signup')}
                   className="flex items-center space-x-1 bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors"
                 >
                   <UserPlus size={20} />
@@ -128,7 +127,7 @@ function App() {
                 </div>
               </div>
               <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-                <p>&copy; 2024 FreshMart. All rights reserved.</p>
+                <p>&copy; 2025 FreshMart. All rights reserved.</p>
               </div>
             </div>
           </footer>

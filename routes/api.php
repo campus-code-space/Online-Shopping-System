@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ProductController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+
  Route::get('/',function(){
     return "API";
  });
@@ -16,11 +17,15 @@ use App\Http\Controllers\API\ProductController;
  Route::post('/login',[AuthController::class,'login']);
 
  
- Route::middleware(['auth:sanctum','ability:admin'])->group(function(){
+Route::middleware(['auth:sanctum','ability:admin'])->group(function(){
     Route::get('/product',[ProductController::class,'index']);
 });
 
-// Route::middleware([]'ability']);
+Route::middleware(['auth:sanctum','ability:Vendor'])->group(function(){
+
+   Route::post('/products',[ProductController::class,'store']);
+
+});
 
   
 Route::get('/order',function(){

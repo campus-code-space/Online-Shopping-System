@@ -10,7 +10,9 @@ import CartPage from "../views/CartPage";
 import Unauthorized from "../views/Unauthorized";
 import Signup from "../views/Signup";
 import PrivateRoute from "../auth/PrivateRoute";
-      
+import VendorDashboard from "../views/VendorDashboard";
+import ProductPost from '../views/ProductPost';
+
 const router = createBrowserRouter( [
     {
         path: '/',
@@ -19,6 +21,16 @@ const router = createBrowserRouter( [
     {
         path:"/signin",
         element:<SignIn />
+    },
+    {
+        path:'/vendor-management',
+        element:<VendorDashboard/>,
+        children:[
+            {
+                path:'product-post',
+                element:<ProductPost/>
+            }
+        ]
     },
     {
         path:"/signup",

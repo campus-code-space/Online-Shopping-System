@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('product_image');
+            $table->longText('product_image');
             $table->decimal('price', 10, 2);
             $table->integer('stock_quantity');
             $table->date('expire_date')->nullable();

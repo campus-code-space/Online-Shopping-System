@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('role'); // customer, vendor, admin, delivery_agent
             $table->string('address')->nullable();
             $table->string('fayda_number')->nullable();
-            $table->text('profile_image')->nullable();
-            $table->text('identity_card_image')->nullable();
+            $table->longText('profile_image')->nullable();
+            $table->longText('identity_card_image')->nullable();
             $table->string('delivery_mode')->nullable();
             $table->rememberToken();
             $table->timestamps();

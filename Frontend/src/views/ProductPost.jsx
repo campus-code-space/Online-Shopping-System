@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import defaultImage from '../assets/default_image.png'
 import { calc_image_size, getBase64Img  } from '../helper/imageConverter';
-
+import { getUserToken } from '../auth/auth';
 export default function ProductPost() {
 
   const [productData, setProductData] = useState({
@@ -25,13 +25,17 @@ export default function ProductPost() {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, you would create the account here
+    const token = getUserToken();
+
     try {
-      let response = await axios.post('http://localhost:8000/api/register', productData);
+      let response = await axios({
+        url:'http://localhost:8000/api/products',
+        data:productData,
+        method:'post',
+        headers:{'Authorization':`Bearer ${token}`}
+      });
       console.log(JSON.stringify(response.data));
       if (response.data.status) {
-
-        // localStorage.setItem('userdata',`${JSON.stringify(response.data)}`);
 
         toast.success(`${response.data.message}`, {
           position: "top-center",
@@ -62,7 +66,6 @@ export default function ProductPost() {
     } catch (e) {
       console.log(e);
     }
-
   };
   const handleChange = (e) => {
     setProductData((prev) => {
@@ -75,7 +78,6 @@ export default function ProductPost() {
     try {
       image = await getBase64Img(file);
       setImage(image);
-      
     }catch(e){
       console.log(e);
     }
@@ -86,6 +88,7 @@ export default function ProductPost() {
       return newData;
     });
   }
+  console.log(productData);
   return (
     <div className='flex w-full  items-center gap-5 bg-gray-50'>
       <div className="grow min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

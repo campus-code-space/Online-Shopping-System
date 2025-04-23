@@ -41,7 +41,7 @@ export default function Signup() {
           });
           setTimeout(() => {
             navigate('/signin');
-          }, 2000);
+          }, 700);
       }else{
         toast.error(`${response.data.message}`, {
           position: "top-center",

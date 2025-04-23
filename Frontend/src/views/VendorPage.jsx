@@ -1,10 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
 
-function VendorDashboard() {
+function VendorPage() {
   return (
     <div>
-      VendorDashboard
+      VendorPage
     <div>
       <Outlet/>
     </div>
@@ -12,4 +12,4 @@ function VendorDashboard() {
   )
 }
 
-export default VendorDashboard;
+export default VendorPage;

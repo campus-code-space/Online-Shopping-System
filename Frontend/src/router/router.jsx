@@ -1,60 +1,62 @@
 import { createBrowserRouter } from "react-router-dom";
 import React from 'react';
-import Home from "../views/Home";
-import SignIn from '../views/SignIn';
-import Register from '../views/Register';
-import DashboardLayout from '../views/DashboardLayout';
-import DiscountPage from '../views/DiscountPage'
-import BulkSubscription from '../views/BulkSubscription'
-import CartPage from "../views/CartPage";
-import Unauthorized from "../views/Unauthorized";
-import Signup from "../views/Signup";
+import {Home,SignIn,Register,DashboardLayout,DiscountPage,BulkSubscription,
+    CartPage,Unauthorized,Signup,ProductPost,
+    ProductList,ProductDetail,MyProduct,
+    VendorPage} from '../pages.js'
+import Profile from '../views/Profile.jsx'
 import PrivateRoute from "../auth/PrivateRoute";
-import VendorDashboard from "../views/VendorDashboard";
-import ProductPost from '../views/ProductPost';
 
-const router = createBrowserRouter( [
+const router = createBrowserRouter([
     {
         path: '/',
-        element: <Home/>
+        element: <Home />
     },
     {
-        path:"/signin",
-        element:<SignIn />
+        path: "/signin",
+        element: <SignIn />
     },
     {
-        path:'/vendor-management',
-        element:<VendorDashboard/>,
-        children:[
+        path: "/signup",
+        element: <Signup />
+    },
+    {
+        path: '/vendor-management',
+        element: <PrivateRoute Component={VendorPage} allowedRoles={['Vendor']} />,
+        children: [
             {
-                path:'product-post',
-                element:<ProductPost/>
-            }
+                path: 'my-products',
+                element: <MyProduct />
+            },
+            {
+                path: 'profile',
+                element: <Profile />
+            },
+            {
+                path: 'product-post',
+                element: <ProductPost />
+            },
         ]
     },
     {
-        path:"/signup",
-        element:<Signup />
-    },    
-    {
-        path:"/dashboard",
-        element:<PrivateRoute Component={DashboardLayout} allowedRoles={['User']}/>
-    },    
-    {
-        path:"/discounts",
-        element:<DiscountPage />
+        path: "/dashboard",
+        element: <PrivateRoute Component={DashboardLayout} allowedRoles={['User']} />
     },
     {
-        path:"/bulkSubscription",
-        element:<BulkSubscription />
+        path: "/discounts",
+        element: <DiscountPage />
     },
     {
-        path:"/CartPage",
-        element:<CartPage/>
+        path: "/bulkSubscription",
+        element: <BulkSubscription />
     },
     {
-        path:"/unauthorized",
-        element:<Unauthorized/>
+        path: "/CartPage",
+        element: <CartPage />
+    },
+    {
+        path: "/unauthorized",
+        element: <Unauthorized />
     },
 ])
 export default router;

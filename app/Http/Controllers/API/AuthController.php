@@ -58,7 +58,6 @@ class AuthController extends Controller
                 ]);
             }
 
-             
 
              //Full Schema is not finished its for dev purpose
              $user = User::create([
@@ -116,7 +115,7 @@ class AuthController extends Controller
 
             return response()->json([
                 "status"=>0,
-                "message"=>"Incorrect password or email",
+                "message"=>"Incorrect password or email",   
             ]);
         
     }

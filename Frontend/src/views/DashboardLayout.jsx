@@ -4,6 +4,8 @@ import { Settings, Tag, MapPin, Bell, ShoppingCart, Search, Package } from 'luci
 import Data from '../../Data.json'
 import { cartContext } from '../context/contextProvider';
 import { getUserRole } from '../auth/auth';
+import CategoryNav from '../components/CategoryNav';
+
 export default function DashboardLayout() {
   const [products,setproducts]= useState(Data.products)
   const {dispatch} = useContext(cartContext);
@@ -80,17 +82,7 @@ export default function DashboardLayout() {
           </div>
 
           {/* Category Navigation */}
-          <nav className="px-8 py-3 border-t">
-            <ul className="flex space-x-6">
-              <li><a href="#" className="text-green-600 font-medium">All Items</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-green-600">Fruits</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-green-600">Vegetables</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-green-600">Meat</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-green-600">Dairy</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-green-600">Bakery</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-green-600">Beverages</a></li>
-            </ul>
-          </nav>
+         <CategoryNav/>
         </header>
 
         {/* Product Grid */}

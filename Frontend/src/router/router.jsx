@@ -2,8 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import React from 'react';
 import {Home,SignIn,Register,DashboardLayout,DiscountPage,BulkSubscription,
     CartPage,Unauthorized,Signup,ProductPost,
-    ProductList,ProductDetail,MyProduct,
-    VendorPage} from '../pages.js'
+    MyProduct,VendorPage} from '../pages.js'
+import ProductList from "../components/ProductList.jsx";
 import Profile from '../views/Profile.jsx'
 import PrivateRoute from "../auth/PrivateRoute";
 
@@ -25,6 +25,10 @@ const router = createBrowserRouter([
         element: <PrivateRoute Component={VendorPage} allowedRoles={['Vendor']} />,
         children: [
             {
+                index:true,
+                element:<ProductList/>
+            },
+            {
                 path: 'my-products',
                 element: <MyProduct />
             },
@@ -32,11 +36,11 @@ const router = createBrowserRouter([
                 path: 'profile',
                 element: <Profile />
             },
-            {
-                path: 'product-post',
-                element: <ProductPost />
-            },
         ]
+    },
+    {
+        path: '/vendor-management/product-post',
+        element:<PrivateRoute Component={ProductPost} allowedRoles={['Vendor']} />,
     },
     {
         path: "/dashboard",

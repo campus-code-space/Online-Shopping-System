@@ -3,6 +3,7 @@ import { ToastContainer ,toast} from "react-toastify";
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
+import { getUserRole } from '../auth/auth';
 export default function SignIn() {
 
   const [userData, setUserData] = useState({
@@ -36,10 +37,20 @@ export default function SignIn() {
           progress: undefined,
           theme: "light",
         });
-
+      let role = getUserRole();
         setTimeout(() => {
           //after 2 seconds navigate to dashboard
-          navigate('/dashboard');
+          console.log('role is ',role);
+          switch(role){
+              case'User':
+              navigate('/dashboard');
+              break
+              case 'Vendor':
+              navigate('/vendor-management');
+              break
+              default:
+                navigate('/');
+          }
         }, 2000);
 
       } else {

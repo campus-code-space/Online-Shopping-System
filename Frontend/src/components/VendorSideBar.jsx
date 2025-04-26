@@ -4,6 +4,7 @@ import { CiSettings } from "react-icons/ci";
 import { HiBriefcase } from "react-icons/hi";
 import { MdSubscriptions } from "react-icons/md";
 import { Link } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 function VendorSideBar() {
   return (
     <aside className='w-40 h-[calc(100%-50px)] fixed mt-[60px] left-0 border-white border-r-2'>
@@ -28,6 +29,11 @@ function VendorSideBar() {
           <div className='text-white flex p-3 items-center justify-evenly text-[15px]
            hover:bg-green-800'>
           <MdSubscriptions size={40} />Subscription</div>
+        </Link>
+        <Link to='/vendor-managment/subscription'>
+          <div className='text-white flex p-3 items-center justify-evenly text-[15px]
+           hover:bg-green-800'>
+        <LogOut size={40}/>Log Out</div>
         </Link>
       </div>
     </aside>

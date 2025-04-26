@@ -7,6 +7,7 @@ import axios from 'axios';
 import defaultImage from '../assets/default_image.png'
 import { calc_image_size, getBase64Img  } from '../helper/imageConverter';
 import { getUserToken } from '../auth/auth';
+import { CATEGORIES } from '../helper/categories';
 export default function ProductPost() {
 
   const [productData, setProductData] = useState({
@@ -19,14 +20,12 @@ export default function ProductPost() {
     productCategory: '',
     productSubCategory: '',
   });
-
+   CATEGORIES.shift();
   const [image,setImage] = useState(defaultImage);
 
-  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = getUserToken();
-
     try {
       let response = await axios({
         url:'http://localhost:8000/api/products',
@@ -36,31 +35,16 @@ export default function ProductPost() {
       });
       console.log(JSON.stringify(response.data));
       if (response.data.status) {
-
-        toast.success(`${response.data.message}`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
+        toast.success(`${response.data.message}`, {position: "top-center",autoClose: 5000,hideProgressBar: false,
+          closeOnClick: false,pauseOnHover: true,draggable: true,progress: undefined, theme: "light",
         });
 
         // setTimeout(() => {
         //   navigate('/signin');
         // }, 2000);
       } else {
-        toast.error(`${response.data.message}`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
+        toast.error(`${response.data.message}`, { position: "top-center",autoClose: 5000,hideProgressBar: false,closeOnClick: false,
+        pauseOnHover: true,draggable: true,progress: undefined,theme: "light",
         });
       }
     } catch (e) {
@@ -89,7 +73,10 @@ export default function ProductPost() {
     });
   }
   console.log(productData);
-  return (
+
+  if(image){
+    
+    return (
     <div className='flex w-full  items-center gap-5 bg-gray-50'>
       <div className="grow min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <ToastContainer />
@@ -109,12 +96,7 @@ export default function ProductPost() {
                   Product Name
                 </label>
                 <div className="mt-1">
-                  <input
-                    id="name"
-                    name="productName"
-                    type="text"
-                    autoComplete="name"
-                    required
+                  <input id="name" name="productName" type="text" autoComplete="name" required
                     value={productData.productName}
                     onChange={handleChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
@@ -127,11 +109,7 @@ export default function ProductPost() {
                   Product Image
                 </label>
                 <div className="mt-1">
-                  <input
-                    id="productImage"
-                    name="productImage"
-                    type="file"
-                    required
+                  <input id="productImage" name="productImage" type="file" required
                     onChange={handleImageChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                   />
@@ -143,11 +121,7 @@ export default function ProductPost() {
                   Product Price
                 </label>
                 <div className="mt-1">
-                  <input
-                    id="productPrice"
-                    name="productPrice"
-                    type="number"
-                    required
+                  <input id="productPrice" name="productPrice" type="number" required
                     value={productData.productPrice}
                     onChange={handleChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
@@ -175,11 +149,7 @@ export default function ProductPost() {
                   Final Price
                 </label>
                 <div className="mt-1">
-                  <input
-                    id="final_price"
-                    name="final_price"
-                    type="number"
-                    required
+                  <input id="final_price" name="final_price" type="number" required
                     value={productData.final_price}
                     onChange={handleChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
@@ -194,6 +164,9 @@ export default function ProductPost() {
                   <select name="productCategory" id="Category" onChange={handleChange}>
                     <option value='Fruit'>Fruit</option>
                     <option value='Vegetable'>Vegetable</option>
+                    <option value='Bakery'>Bakery</option>
+                    <option value='Diary'>Diary</option>
+                    <option value='Beverage'>Beverage</option>
                   </select>
                 </div>
               </div>
@@ -203,16 +176,20 @@ export default function ProductPost() {
                 </label>
                 <div className="mt-1">
                   <select name="productSubCategory" id="subCategory" onChange={handleChange}>
-                    <option value='Packed'>Packed</option>
-                    <option value='UnPacked'>UnPacked</option>
+                      {
+                    CATEGORIES.map((item,index)=>{
+                          return (item.sub.map((sub,index)=>{
+                            return (<option key={index} value={sub}>{sub}</option>)
+                          }))
+                    })
+                      }
                   </select>
                 </div>
               </div>
               <div>
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                   Post
                 </button>
               </div>
@@ -223,4 +200,5 @@ export default function ProductPost() {
       <img src={image} id='image' alt="Default Image" className='h-100 rounded-lg max-w-md m-5.5'/>
     </div>
   );
+}
 }

@@ -6,11 +6,13 @@ const categories = CATEGORIES;
 function CategoryNav() {
     
   return (
-    <nav className="px-8 py-3 border-b w-full">
-    <ul className="flex space-x-6">
+    <nav className="px-8 py-3 border-b w-full rounded-2xl">
+    <ul className="flex space-x-7 rounded-tl-2xl">
      {
         categories.map((category,index)=>{
-            return <ul><CategoryItem item={category.name} sub={category.sub}key={index}/></ul>
+            return <ul key={index} className='border-1 rounded-xl py-1  hover:bg-green-600'>
+              <CategoryItem item={category.name} sub={category.sub} key={index}/>
+              </ul>
         })
      }
     </ul>

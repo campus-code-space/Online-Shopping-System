@@ -10,7 +10,7 @@ function VendorPage() {
     <div>
       <VendorNavBar />
       <VendorSideBar />
-      <div className='mt-[60px] ml-[150px] inline-flex bg-amber-50 w-[calc(100vw-169px)] p-1.5'>
+      <div className='mt-[60px] ml-[150px] inline-flex w-[calc(100vw-169px)] p-1.5 rounded-tl-2xl'>
         <CategoryNav />
       </div>
       <Outlet />

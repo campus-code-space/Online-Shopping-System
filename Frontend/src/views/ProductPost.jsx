@@ -9,7 +9,17 @@ import { calc_image_size, getBase64Img  } from '../helper/imageConverter';
 import { getUserToken } from '../auth/auth';
 import { CATEGORIES } from '../helper/categories';
 export default function ProductPost() {
+  
+  let copiedCategory = [...CATEGORIES];
+  copiedCategory.shift();
 
+  let subCategories = [];
+
+  copiedCategory.map((category)=>{
+       subCategories.push(...category.sub);
+  });
+
+  console.log('sub ',subCategories);
   const [productData, setProductData] = useState({
     productName: '',
     productImage: '',
@@ -17,10 +27,10 @@ export default function ProductPost() {
     stock_quantity: '',
     final_price: '',
     sold: "",
-    productCategory: '',
+    productCategory: 'Fruit',
     productSubCategory: '',
-  });
-   CATEGORIES.shift();
+  });  
+
   const [image,setImage] = useState(defaultImage);
 
   const handleSubmit = async (e) => {
@@ -74,7 +84,7 @@ export default function ProductPost() {
   }
   console.log(productData);
 
-  if(image){
+
     
     return (
     <div className='flex w-full  items-center gap-5 bg-gray-50'>
@@ -177,11 +187,9 @@ export default function ProductPost() {
                 <div className="mt-1">
                   <select name="productSubCategory" id="subCategory" onChange={handleChange}>
                       {
-                    CATEGORIES.map((item,index)=>{
-                          return (item.sub.map((sub,index)=>{
-                            return (<option key={index} value={sub}>{sub}</option>)
-                          }))
-                    })
+                      subCategories.map((sub,index)=>{
+                        return (<option key={index} value={sub}>{sub}</option>)
+                      })
                       }
                   </select>
                 </div>
@@ -200,5 +208,5 @@ export default function ProductPost() {
       <img src={image} id='image' alt="Default Image" className='h-100 rounded-lg max-w-md m-5.5'/>
     </div>
   );
-}
+
 }

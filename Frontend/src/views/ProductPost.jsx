@@ -10,14 +10,16 @@ import { getUserToken } from '../auth/auth';
 import { CATEGORIES } from '../helper/categories';
 export default function ProductPost() {
   
-  CATEGORIES.shift();
+  let copiedCategory = [...CATEGORIES];
+  copiedCategory.shift();
 
   let subCategories = [];
 
-  CATEGORIES.map((category)=>{
+  copiedCategory.map((category)=>{
        subCategories.push(...category.sub);
   });
 
+  console.log('sub ',subCategories);
   const [productData, setProductData] = useState({
     productName: '',
     productImage: '',
@@ -82,7 +84,7 @@ export default function ProductPost() {
   }
   console.log(productData);
 
-  if(image){
+
     
     return (
     <div className='flex w-full  items-center gap-5 bg-gray-50'>
@@ -206,5 +208,5 @@ export default function ProductPost() {
       <img src={image} id='image' alt="Default Image" className='h-100 rounded-lg max-w-md m-5.5'/>
     </div>
   );
-}
+
 }

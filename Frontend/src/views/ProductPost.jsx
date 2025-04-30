@@ -9,6 +9,14 @@ import { calc_image_size, getBase64Img  } from '../helper/imageConverter';
 import { getUserToken } from '../auth/auth';
 import { CATEGORIES } from '../helper/categories';
 export default function ProductPost() {
+  
+  CATEGORIES.shift();
+
+  let subCategories = [];
+
+  CATEGORIES.map((category)=>{
+       subCategories.push(...category.sub);
+  });
 
   const [productData, setProductData] = useState({
     productName: '',
@@ -17,10 +25,10 @@ export default function ProductPost() {
     stock_quantity: '',
     final_price: '',
     sold: "",
-    productCategory: '',
+    productCategory: 'Fruit',
     productSubCategory: '',
-  });
-   CATEGORIES.shift();
+  });  
+
   const [image,setImage] = useState(defaultImage);
 
   const handleSubmit = async (e) => {
@@ -177,11 +185,9 @@ export default function ProductPost() {
                 <div className="mt-1">
                   <select name="productSubCategory" id="subCategory" onChange={handleChange}>
                       {
-                    CATEGORIES.map((item,index)=>{
-                          return (item.sub.map((sub,index)=>{
-                            return (<option key={index} value={sub}>{sub}</option>)
-                          }))
-                    })
+                      subCategories.map((sub,index)=>{
+                        return (<option key={index} value={sub}>{sub}</option>)
+                      })
                       }
                   </select>
                 </div>

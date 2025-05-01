@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Exception;
 use App\Models\Product;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,12 @@ class ProductController extends Controller
     public function store(Request $request){
         $user = Auth::user();
 
+         $subCategoryId = SubCategory::where('name',$request->productSubCategory)->first();
+
+         if (!$subCategoryId) {
+            return response()->json(['error' => 'SubCategory not found'], 404);
+        }
+ 
             try{
 
                 $product = Product::create([
@@ -29,7 +36,7 @@ class ProductController extends Controller
                     'final_price'=>$request->final_price,
                     'sold'=>0,
                     'vendor_id'=>$user->id,
-                    'sub_category_id'=>1
+                    'sub_category_id'=>$subCategoryId->id
                 ]);
             }catch(Exception $e){
                 return response(" {$e->getMessage()}",500);
@@ -39,6 +46,5 @@ class ProductController extends Controller
             'status'=>1,
             'message'=>"Product posted Succesfully",
         ]);
-        dd($product);
     }
 }

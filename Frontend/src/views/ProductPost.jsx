@@ -9,7 +9,21 @@ import { calc_image_size, getBase64Img  } from '../helper/imageConverter';
 import { getUserToken } from '../auth/auth';
 import { CATEGORIES } from '../helper/categories';
 export default function ProductPost() {
-  
+
+  const navigate = useNavigate();
+  const [productData, setProductData] = useState({
+    productName: '',
+    productImage: '',
+    productPrice: '',
+    stock_quantity: '',
+    final_price: '',
+    sold: "",
+    productCategory: 'Fruit',
+    productSubCategory: 'Berries',
+  });  
+
+  const [image,setImage] = useState(defaultImage);
+
   let copiedCategory = [...CATEGORIES];
   copiedCategory.shift();
 
@@ -19,20 +33,7 @@ export default function ProductPost() {
        subCategories.push(...category.sub);
   });
 
-  console.log('sub ',subCategories);
-  const [productData, setProductData] = useState({
-    productName: '',
-    productImage: '',
-    productPrice: '',
-    stock_quantity: '',
-    final_price: '',
-    sold: "",
-    productCategory: 'Fruit',
-    productSubCategory: '',
-  });  
-
-  const [image,setImage] = useState(defaultImage);
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = getUserToken();
@@ -45,13 +46,15 @@ export default function ProductPost() {
       });
       console.log(JSON.stringify(response.data));
       if (response.data.status) {
+
         toast.success(`${response.data.message}`, {position: "top-center",autoClose: 5000,hideProgressBar: false,
           closeOnClick: false,pauseOnHover: true,draggable: true,progress: undefined, theme: "light",
         });
 
-        // setTimeout(() => {
-        //   navigate('/signin');
-        // }, 2000);
+        setTimeout(()=>{
+         navigate('/vendor-management');
+        },2000);
+
       } else {
         toast.error(`${response.data.message}`, { position: "top-center",autoClose: 5000,hideProgressBar: false,closeOnClick: false,
         pauseOnHover: true,draggable: true,progress: undefined,theme: "light",
@@ -205,7 +208,7 @@ export default function ProductPost() {
           </div>
         </div>
       </div>
-      <img src={image} id='image' alt="Default Image" className='h-100 rounded-lg max-w-md m-5.5'/>
+      <img src={image} width='400' height='200' id='image' alt="Default Image" className='h-100 rounded-lg max-w-md m-5.5'/>
     </div>
   );
 

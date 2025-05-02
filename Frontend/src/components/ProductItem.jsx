@@ -4,10 +4,10 @@ function ProductItem({ product ,loading}) {
   if(loading){
 
     return (
-      <li className="p-[10px] item-1 list-none">
-      <div className="card is-loading mx-2 w-[300px] bg-white rounded shadow-md">
-        <div className="image h-[200px] rounded-t">
-          <img src="" alt="" width={280} height={320} />
+      <li className="p-[10px] item-1 list-none border-none">
+      <div className="card is-loading mx-2 w-[300px] bg-white rounded shadow-md border-none">
+        <div className="image h-[200px] rounded-t border-none">
+          <img src="" alt="" className='border-none' />
         </div>
         <div className="content p-5">
           <h2 className="shimmer h-[30px] w-3/4 mb-4 rounded"></h2>

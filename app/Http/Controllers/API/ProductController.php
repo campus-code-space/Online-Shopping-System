@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
     public function index(){
-           
+
+
         return response()->json([
-            "status"=>1
+            "status"=>1,
+            'product_list'=>Product::inRandomOrder()->limit(5)->get()
         ]);
     }
     public function store(Request $request){
@@ -25,7 +27,10 @@ class ProductController extends Controller
          if(!$subCategoryId){
             return response()->json(['error' => 'SubCategory not found'], 404);
         }
- 
+
+        $desc = ($request->productDescription)?($request->productDescription):(null);
+        $discount = ($request->discount)?((float)$request->discount):(null);
+
             try{
 
                 $product = Product::create([
@@ -33,7 +38,9 @@ class ProductController extends Controller
                     'product_image'=>$request->productImage,
                     'price'=>$request->productPrice,
                     'stock_quantity'=>$request->stock_quantity,
-                    'final_price'=>$request->final_price,
+                    'discount'=>$discount,
+                    'final_price'=>(float)$request->final_price,
+                    'description'=>$desc,
                     'sold'=>0,
                     'vendor_id'=>$user->id,
                     'sub_category_id'=>$subCategoryId->id

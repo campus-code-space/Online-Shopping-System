@@ -18,7 +18,7 @@ export default function ProductPost() {
     productPrice: '',
     discount: '',
     stock_quantity: '',
-    final_price: '',
+    final_price:'',
     sold: "",
     productDescription: '',
     productCategory: 'Fruit',
@@ -71,9 +71,12 @@ export default function ProductPost() {
     }
   };
   const handleChange = (e) => {
+
     setProductData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value }
+      return { ...prev, [e.target.name]: e.target.value ,
+      }
     });
+
   }
   const handleImageChange = async (e) => {
     let file = e.target.files[0];
@@ -95,7 +98,13 @@ export default function ProductPost() {
   const handleToggleDiscount = () => {
     setToggleDiscount(!toggleDiscount);
   }
-
+  const handleProductPriceChange = (e)=>{
+    setProductData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value, 
+        final_price:e.target.value
+      }
+    });
+  }
   const handleChangeDiscount = (e)=>{
     if(e.target.value>=100 || e.target.value<0){
       return null
@@ -219,7 +228,7 @@ export default function ProductPost() {
                 <div className="mt-1">
                   <input id="productPrice" name="productPrice" type="number" required
                     value={productData.productPrice}
-                    onChange={handleChange}
+                    onChange={handleProductPriceChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                   />
                 </div>

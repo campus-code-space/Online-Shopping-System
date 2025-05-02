@@ -13,7 +13,9 @@ function VendorPage() {
       <div className='mt-[60px] ml-[150px] inline-flex w-[calc(100vw-169px)] p-1.5 rounded-tl-2xl'>
         <CategoryNav />
       </div>
-      <Outlet />
+      <div className='ml-[160px] w-[calc(100%-169px)]'>
+        <Outlet />
+      </div>
     </div>
   )
 }

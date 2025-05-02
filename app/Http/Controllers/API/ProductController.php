@@ -16,7 +16,7 @@ class ProductController extends Controller
 
         return response()->json([
             "status"=>1,
-            'product_list'=>Product::inRandomOrder()->limit(5)->get()
+            'product_list'=>Product::inRandomOrder()->limit(6)->get()
         ]);
     }
     public function store(Request $request){

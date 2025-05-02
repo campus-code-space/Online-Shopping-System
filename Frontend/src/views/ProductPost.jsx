@@ -5,9 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import defaultImage from '../assets/default_image.png'
-import { calc_image_size, getBase64Img  } from '../helper/imageConverter';
+import { calc_image_size, getBase64Img } from '../helper/imageConverter';
 import { getUserToken } from '../auth/auth';
 import { CATEGORIES } from '../helper/categories';
+import { MoveDown, MoveUp } from 'lucide-react';
 export default function ProductPost() {
 
   const navigate = useNavigate();
@@ -15,49 +16,54 @@ export default function ProductPost() {
     productName: '',
     productImage: '',
     productPrice: '',
+    discount: '',
     stock_quantity: '',
     final_price: '',
     sold: "",
+    productDescription: '',
     productCategory: 'Fruit',
     productSubCategory: 'Berries',
-  });  
+  });
 
-  const [image,setImage] = useState(defaultImage);
+  const [image, setImage] = useState(defaultImage);
+  const [toggleDiscount, setToggleDiscount] = useState(false);
 
   let copiedCategory = [...CATEGORIES];
   copiedCategory.shift();
 
   let subCategories = [];
 
-  copiedCategory.map((category)=>{
-       subCategories.push(...category.sub);
+  copiedCategory.map((category) => {
+    subCategories.push(...category.sub);
   });
 
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = getUserToken();
     try {
       let response = await axios({
-        url:'http://localhost:8000/api/products',
-        data:productData,
-        method:'post',
-        headers:{'Authorization':`Bearer ${token}`}
+        url: 'http://localhost:8000/api/products',
+        data: productData,
+        method: 'post',
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       console.log(JSON.stringify(response.data));
       if (response.data.status) {
 
-        toast.success(`${response.data.message}`, {position: "top-center",autoClose: 5000,hideProgressBar: false,
-          closeOnClick: false,pauseOnHover: true,draggable: true,progress: undefined, theme: "light",
+        toast.success(`${response.data.message}`, {
+          position: "top-center", autoClose: 5000, hideProgressBar: false,
+          closeOnClick: false, pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
         });
 
-        setTimeout(()=>{
-         navigate('/vendor-management');
-        },1300);
+        setTimeout(() => {
+          navigate('/vendor-management');
+        }, 1300);
 
       } else {
-        toast.error(`${response.data.message}`, { position: "top-center",autoClose: 5000,hideProgressBar: false,closeOnClick: false,
-        pauseOnHover: true,draggable: true,progress: undefined,theme: "light",
+        toast.error(`${response.data.message}`, {
+          position: "top-center", autoClose: 5000, hideProgressBar: false, closeOnClick: false,
+          pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
         });
       }
     } catch (e) {
@@ -75,20 +81,44 @@ export default function ProductPost() {
     try {
       image = await getBase64Img(file);
       setImage(image);
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
     setProductData((prev) => {
-      const newData = {...prev,
-        productImage:image
+      const newData = {
+        ...prev,
+        productImage: image
       };
       return newData;
     });
   }
+  const handleToggleDiscount = () => {
+    setToggleDiscount(!toggleDiscount);
+  }
+
+  const handleChangeDiscount = (e)=>{
+    if(e.target.value>=100 || e.target.value<0){
+      return null
+    }
+    if(e.target.value==0){
+      setProductData((prev) => {
+        return { ...prev, [e.target.name]: e.target.value, 
+          final_price:""
+        }
+      });
+    }
+      setProductData((prev) => {
+        return { ...prev, [e.target.name]: e.target.value, 
+          final_price:productData.productPrice-(productData.productPrice*(e.target.value/100))
+        }
+      });
     
-    return (
-    <div className='flex w-full  items-center gap-5 bg-gray-50'>
-      <div className="grow min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  }
+  console.log(productData);
+
+  return (
+    <div className='flex items-start w-full h-full  flex-start'>
+      <div className="min-h-screen w-150 bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <ToastContainer />
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link to="/vendor-management" className="flex items-center text-green-600 hover:text-green-700 mb-6 mx-4">
@@ -125,14 +155,14 @@ export default function ProductPost() {
                   />
                 </div>
               </div>
-
+              
               <div>
-                <label htmlFor="productPrice" className="block text-sm font-medium text-gray-700">
-                  Product Price
+                <label htmlFor="productDescription" className="block text-sm font-medium text-gray-700">
+                  Product Description
                 </label>
                 <div className="mt-1">
-                  <input id="productPrice" name="productPrice" type="number" required
-                    value={productData.productPrice}
+                  <input id="productDescription" name="productDescription" type="text"
+                    value={productData.productDescription} placeholder='Product Description is Optional'
                     onChange={handleChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                   />
@@ -149,18 +179,6 @@ export default function ProductPost() {
                     type="number"
                     required
                     value={productData.stock_quantity}
-                    onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="final_price" className="block text-sm font-medium text-gray-700">
-                  Final Price
-                </label>
-                <div className="mt-1">
-                  <input id="final_price" name="final_price" type="number" required
-                    value={productData.final_price}
                     onChange={handleChange}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
                   />
@@ -186,14 +204,61 @@ export default function ProductPost() {
                 </label>
                 <div className="mt-1">
                   <select name="productSubCategory" id="subCategory" onChange={handleChange}>
-                      {
-                      subCategories.map((sub,index)=>{
+                    {
+                      subCategories.map((sub, index) => {
                         return (<option key={index} value={sub}>{sub}</option>)
                       })
-                      }
+                    }
                   </select>
                 </div>
               </div>
+              <div>
+                <label htmlFor="productPrice" className="block text-sm font-medium text-gray-700">
+                  Product Price
+                </label>
+                <div className="mt-1">
+                  <input id="productPrice" name="productPrice" type="number" required
+                    value={productData.productPrice}
+                    onChange={handleChange}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
+              </div>
+              <div onClick={handleToggleDiscount} className='bg-green-600 w-[70%] rounded-xl p-[7px] flex text-white
+              justify-center items-center gap-2'>
+                <button >Set Discount</button>
+                {(toggleDiscount) ? (<MoveUp size={20} />) : <MoveDown size={20} />
+                }
+              </div>
+              {
+                toggleDiscount &&
+                <div>
+                  <div>
+                    <label htmlFor="discount" className="block text-sm font-medium text-gray-700">
+                      Discount
+                    </label>
+                    <div className="mt-1">
+                      <input id="discount" name="discount" type="number" required
+                        value={productData.discount}
+                        onChange={handleChangeDiscount}
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor="final_price" className="block text-sm font-medium text-gray-700">
+                      Final Price
+                    </label>
+                    <div className="mt-1">
+                      <input id="final_price" name="final_price" type="number" required
+                        value={productData.final_price}
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </div>
+              }
               <div>
                 <button
                   type="submit"
@@ -205,7 +270,9 @@ export default function ProductPost() {
           </div>
         </div>
       </div>
-      <img src={image} width='400' height='200' id='image' alt="Default Image" className='h-100 rounded-lg max-w-md m-5.5'/>
+
+      <img src={image} width='373' height='175' id='image' alt="Default Image"
+        className='h-100 rounded-lg max-w-md m-5.5 fixed left-185 top-20' />
     </div>
   );
 

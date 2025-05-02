@@ -15,17 +15,17 @@ function VendorSideBar() {
            hover:bg-green-800 hover:self-end'>
             <CgProfile size={40} />Profile</div>
         </Link>
-        <Link to='/vendor-managment/setting'>
+        <Link to='/vendor-management/setting'>
           <div className='text-white flex p-3 items-center justify-evenly
            hover:bg-green-800'>
             <CiSettings size={40} />Setting</div>
         </Link>
-        <Link to='/vendor-managment/my-products'>
+        <Link to='/vendor-management/my-products'>
           <div className='text-white flex p-3 items-center justify-evenly text-[15px]
            hover:bg-green-800'>
             <HiBriefcase size={40} />My-Products</div>
         </Link>
-        <Link to='/vendor-managment/subscription'>
+        <Link to='/vendor-management/subscription'>
           <div className='text-white flex p-3 items-center justify-evenly text-[15px]
            hover:bg-green-800'>
           <MdSubscriptions size={40} />Subscription</div>

@@ -5,7 +5,7 @@ import CartReducer from "./cartReducer";
 export const cartContext = createContext()
 
 const ContextProvider = ({children}) =>{
-    const [cart, dispatch] = useReducer (CartReducer, [])
+    const [cart, dispatch] = useReducer(CartReducer, [])
     return(
         <cartContext.Provider value={{cart,dispatch}}>
             {children}

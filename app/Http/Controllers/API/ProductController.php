@@ -54,4 +54,15 @@ class ProductController extends Controller
             'message'=>"Product posted Succesfully",
         ]);
     }
+    public function currentproduct(Request $request){
+
+        $user = Auth::user();
+
+        $products = Product::where('id',$user->id)->limit(6)->get();
+
+        return response()->json([
+            'status'=>1,
+            "product_list"=>$products
+        ]);
+    }
 }

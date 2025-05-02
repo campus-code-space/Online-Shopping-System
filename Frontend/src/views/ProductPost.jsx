@@ -53,7 +53,7 @@ export default function ProductPost() {
 
         setTimeout(()=>{
          navigate('/vendor-management');
-        },2000);
+        },1300);
 
       } else {
         toast.error(`${response.data.message}`, { position: "top-center",autoClose: 5000,hideProgressBar: false,closeOnClick: false,
@@ -85,9 +85,6 @@ export default function ProductPost() {
       return newData;
     });
   }
-  console.log(productData);
-
-
     
     return (
     <div className='flex w-full  items-center gap-5 bg-gray-50'>

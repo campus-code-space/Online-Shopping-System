@@ -22,7 +22,7 @@ class ProductController extends Controller
 
          $subCategoryId = SubCategory::where('name',$request->productSubCategory)->first();
 
-         if (!$subCategoryId) {
+         if(!$subCategoryId){
             return response()->json(['error' => 'SubCategory not found'], 404);
         }
  

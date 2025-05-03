@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscription_items', function (Blueprint $table) {
+        Schema::create('user_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->string('product_name');
-            $table->integer('quantity');
+            $table->datetime('next_delivery_date')->nullable();
+            $table->string('delivery_status')->nullable(); // pending, out_for_delivery, delivered,for_next
+            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('subscription_id')->constrained('subscriptions')->onDelete('cascade');
             $table->timestamps();
         });
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscription_items');
+        Schema::dropIfExists('user_subscriptions');
     }
 };

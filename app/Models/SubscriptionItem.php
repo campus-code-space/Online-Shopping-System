@@ -21,9 +21,4 @@ class SubscriptionItem extends Model
     {
         return $this->belongsTo(Subscription::class);
     }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 }

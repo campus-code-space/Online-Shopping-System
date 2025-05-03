@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('vendor_id')->constrained('users')->onDelete('cascade');
             $table->datetime('start_date');
             $table->datetime('end_date');
-            $table->datetime('next_delivery_date')->nullable();
-            $table->integer('frequency');
             $table->decimal('total_price', 10, 2);
-            $table->string('status');
-            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

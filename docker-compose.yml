@@ -1,0 +1,42 @@
+services: 
+  api:
+    build: .
+    image: online_shopping_api
+    container_name: online_shopping_api
+    command: sh -c "sleep 10 && sh /var/www/html/watch.sh"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - shopping_db
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: shopping_db
+      DB_PORT: 5432
+      DB_DATABASE: online_shopping_db
+      DB_USERNAME: online_shopping
+      DB_PASSWORD: online_shopping_1234
+    volumes:
+      - .:/var/www/html
+    networks:
+      - shopping-network
+
+  shopping_db:
+    image: postgres
+    container_name: online_shopping_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: online_shopping_db
+      POSTGRES_USER: online_shopping
+      POSTGRES_PASSWORD: online_shopping_1234
+    networks:
+      - shopping-network
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+networks:
+  shopping-network:
+    driver: bridge
+
+volumes:
+  postgres_data:      

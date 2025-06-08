@@ -3,88 +3,152 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use App\Models\Otp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyOtpMail; 
 
 
 class AuthController extends Controller
 {
     public function register(Request $request){
-             
-                  //smtp checking here
  
-             //validating the request
-             
-             $validator = Validator::make($request->all(),[
-                "name"=>"required|string",
-                "email"=>"required|email",
-                "password"=>"required|string",
-                'role'=>"required|string",
-                'phone_number'=>"required|string", 
-                // 'verified_phone_number'=>"required|boolean", 
-                // 'address'=>"string",
-                // 'fayda_number'=>"string",
-                // 'profile_image'=>"string",
-                // 'identity_card_image'=>"string", 
-                // 'delivery_mode'=>"string"
-             ]);
+        //validating the request
+        
+        $validator = Validator::make($request->all(),[
+        "name"=>"required|string",
+        "email"=>"required|email",
+        "password"=>"required|string",
+        'role'=>"required|string",
+        'phone_number'=>"required|string", 
+        // 'verified_phone_number'=>"required|boolean", 
+        // 'address'=>"string",
+        // 'fayda_number'=>"string",
+        // 'profile_image'=>"string",
+        // 'identity_card_image'=>"string", 
+        // 'delivery_mode'=>"string"
+        ]);
 
-             if($validator->fails()){
-                //fix correct validation response
-                return response()->json([
-                    "status"=>0,
-                    "message"=>"Validation error",
-                    "data"=>$validator->errors()->all()
-                ]);
-             }
+        if($validator->fails()){
+        //fix correct validation response
+        return response()->json([
+            "status"=>0,
+            "message"=>"Validation error",
+            "data"=>$validator->errors()->all()
+        ]);
+        }
 
-             //checking if user duplicate exists
-             $duplicateEmail = User::where('email',$request->email)->first();
-             $duplicatePhone = User::where('phone_number',$request->phone_number)->first();
-             //check duplicate for faydanumber and other for future
+        //checking if user duplicate exists
+        $duplicateEmail = User::where('email',$request->email)->first();
+        $duplicatePhone = User::where('phone_number',$request->phone_number)->first();
+        //check duplicate for faydanumber and other for future
 
-             if($duplicateEmail!=null){
-                 return response()->json([
-                     "status"=>0,
-                     "message"=>"User Has Already Registered Please use another email"
-                 ]);
-             }
-             if($duplicatePhone!=null){
-                return response()->json([
-                    "status"=>0,
-                    "message"=>"User Registered Please use another phone number"
-                ]);
-            }
+        if($duplicateEmail!=null){
+            return response()->json([
+                "status"=>0,
+                "message"=>"User Has Already Registered Please use another email"
+            ]);
+        }
+        if($duplicatePhone!=null){
+        return response()->json([
+            "status"=>0,
+            "message"=>"User Registered Please use another phone number"
+        ]);
+        }
+
+        $otpCode = random_int(1000, 9999);
 
 
-             //Full Schema is not finished its for dev purpose
-             $user = User::create([
-                    "name"=>$request->name,
-                    "email"=>$request->email,
-                    "password"=>bcrypt($request->password),
-                    'role'=>$request->role,
-                    'phone_number'=>$request->phone_number, 
-                    // 'verified_phone_number'=>$request->verified_phone_number, 
-             ]);
+        $otp = Otp::updateOrCreate(
+            ['email' => $request->email],
+            [
+                'otp' => $otpCode,
+                'expires_at' => now()->addMinutes(10) 
+            ]
+        );
 
-             $response=[];
-             $token = $user->createToken("My_App",[$user->role])->plainTextToken;
-             //gives the token ability with specific role
+        try {
+            Mail::to($request->email)->send(new VerifyOtpMail($otpCode));
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => 0,
+                "message" => "Could not send OTP email. Please try again later.",
+                "error" => $e->getMessage()
+            ], 500);
+        }
 
-             $response["token"] = $token;
-             $response["name"] = $user->name; 
-             $response["email"] = $user->email; 
-             $response["role"] = $user->role; 
+        return response()->json([
+            "status" => 1,
+            "message" => "An OTP has been sent to your email. Please use it to verify your account."
+        ]);
 
-   
-                 return response()->json([
-                     "status"=>1,
-                     "message"=>"You have registered successfully",
-                     "data"=>$response
-                    ]);
     }
+
+
+    public function verifyAndCreateUser(Request $request)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            "name" => "required|string",
+            "email" => "required|email",
+            "password" => "required|string",
+            'role' => "required|string",
+            'phone_number' => "required|string",
+            'otp' => 'required|numeric|digits:4'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => 0,
+                "message" => "Validation error",
+                "errors" => $validator->errors()
+            ], 422);
+        }
+
+        $otpRecord = Otp::where('email', $request->email)->where('otp', $request->otp)->first();
+
+        // Check if OTP is invalid or expired
+        if (!$otpRecord) {
+            return response()->json(["status" => 0, "message" => "Invalid OTP provided."], 401);
+        }
+
+        if ($otpRecord->expires_at < now()) {
+            $otpRecord->delete(); 
+            return response()->json(["status" => 0, "message" => "OTP has expired. Please request a new one."], 401);
+        }
+
+
+        //Full Schema is not finished its for dev purpose
+        $user = User::create([
+            "name"=>$request->name,
+            "email"=>$request->email,
+            "password"=>bcrypt($request->password),
+            'role'=>$request->role,
+            'phone_number'=>$request->phone_number, 
+            // 'verified_phone_number'=>$request->verified_phone_number, 
+        ]);
+
+        $response=[];
+        $token = $user->createToken("My_App",[$user->role])->plainTextToken;
+        //gives the token ability with specific role
+
+        $response["token"] = $token;
+        $response["name"] = $user->name; 
+        $response["email"] = $user->email; 
+        $response["role"] = $user->role; 
+
+
+        return response()->json([
+            "status"=>1,
+            "message"=>"You have registered successfully",
+            "data"=>$response
+        ]);
+
+    }
+   
 
     public function login(Request $request){
 

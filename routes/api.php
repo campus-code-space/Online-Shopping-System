@@ -15,6 +15,7 @@ use App\Http\Controllers\API\ProductController;
 
  Route::post('/register',[AuthController::class,'register']);
  Route::post('/login',[AuthController::class,'login']);
+ Route::post('/verify', [AuthController::class, 'verifyAndCreateUser']);
 
  
 Route::middleware(['auth:sanctum','ability:admin'])->group(function(){

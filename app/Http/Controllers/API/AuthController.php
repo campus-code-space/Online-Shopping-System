@@ -9,8 +9,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\VerifyOtpMail; 
-
+use App\Mail\VerifyOtpMail;
+use Illuminate\Container\Attributes\Auth as AttributesAuth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
+use PDO;
+use Psy\CodeCleaner\FunctionReturnInWriteContextPass;
 
 class AuthController extends Controller
 {
@@ -183,4 +186,67 @@ class AuthController extends Controller
             ]);
         
     }
+
+
+    public function logout(Request $request){
+        if (Auth::check()){
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'status' => 1,
+                'message' => 'Logged out successfully'
+            ], 200);
+        }
+
+        return response()->json([
+                'status' => 0,
+                'message' => 'Unauthorized'
+            ], 401);        
+    }
+
+
+    public function sendOtp(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+
+        $otpCode = random_int(1000, 9999);
+
+
+        $otp = Otp::updateOrCreate(
+            ['email' => $request->email],
+            [
+                'otp' => $otpCode,
+                'expires_at' => now()->addMinutes(10) 
+            ]
+        );
+
+        try {
+            Mail::to($request->email)->send(new VerifyOtpMail($otpCode));
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => 0,
+                "message" => "Could not send OTP email. Please try again later.",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            "status" => 1,
+            "message" => "An OTP has been sent to your email. Please use it to verify your account."
+        ]);
+
+    }
+
+
+
+
 }

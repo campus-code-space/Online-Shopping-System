@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\SubCategoryController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -30,6 +32,12 @@ Route::middleware(['auth:sanctum','ability:Vendor'])->group(function(){
    Route::get('/myproducts',[ProductController::class,'currentproduct']);
 
 });
+
+
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('categories/{id}', [CategoryController::class, 'show']);
+Route::get('sub-categories', [SubCategoryController::class, 'index']);
+Route::get('sub-categories/{id}', [SubCategoryController::class, 'show']);
 
   
 Route::get('/order',function(){

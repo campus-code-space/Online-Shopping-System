@@ -17,8 +17,9 @@ use App\Http\Controllers\API\SubCategoryController;
 
  Route::post('/register',[AuthController::class,'register']);
  Route::post('/login',[AuthController::class,'login']);
- Route::post('/verify', [AuthController::class, 'verifyAndCreateUser']);
+Route::post('/verify-and-create-user', [AuthController::class, 'verifyAndCreateUser']);
  Route::post('/resendOtp', [AuthController::class, 'sendOtp']);
+ Route::post('/products', [ProductController::class, 'store']);
 
  
 Route::middleware(['auth:sanctum','ability:admin'])->group(function(){

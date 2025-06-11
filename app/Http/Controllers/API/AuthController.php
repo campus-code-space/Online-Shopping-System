@@ -22,10 +22,10 @@ class AuthController extends Controller
         //validating the request
         
         $validator = Validator::make($request->all(),[
-        "name"=>"required|string",
+        // "name"=>"required|string",
         "email"=>"required|email",
-        "password"=>"required|string",
-        'role'=>"required|string",
+        // "password"=>"required|string",
+        // 'role'=>"required|string",
         'phone_number'=>"required|string", 
         // 'verified_phone_number'=>"required|boolean", 
         // 'address'=>"string",

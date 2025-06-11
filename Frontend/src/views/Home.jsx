@@ -17,7 +17,7 @@ export default function Home() {
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <ShoppingBasket size={32} />
-            <span className="text-2xl font-bold">FreshMart</span>
+            <span className="text-2xl font-bold">SelamShoping</span>
           </Link>
           <div className="flex items-center space-x-4">
             {/* Cart Icon with Counter */}
@@ -77,7 +77,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-12">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h4 className="text-white text-lg font-semibold mb-4">About FreshMart</h4>
+              <h4 className="text-white text-lg font-semibold mb-4">About SelamShoping</h4>
               <ul className="space-y-2">
                 <li><a href="#" className="hover:text-white">About Us</a></li>
                 <li><a href="#" className="hover:text-white">Careers</a></li>
@@ -111,7 +111,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p>© 2025 FreshMart. All rights reserved.</p>
+            <p>© 2025 SelamShoping. All rights reserved.</p>
           </div>
         </div>
       </footer>

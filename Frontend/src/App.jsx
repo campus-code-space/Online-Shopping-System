@@ -5,6 +5,7 @@ import SignIn from './views/SignIn';
 import DashboardLayout from './views/DashboardLayout';
 import DiscountPage from './views/DiscountPage'
 import BulkSubscription from './views/BulkSubscription'
+import OTPVerification from './views/OTPVerification';
 
 function App() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function App() {
     <Routes>
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<Signup/>} />
+      <Route path="/otp-verification" element={<OTPVerification />} />
       <Route path="/dashboard" element={<DashboardLayout />} />
       <Route path="/discounts" element={<DiscountPage />} />
       <Route path="/bulkSubscription" element={<BulkSubscription />} />

@@ -7,3 +7,9 @@ vendor
 .idea
 .vscode
 storage/*.key 
+
+node_modules
+Frontend/node_modules
+.git
+.env
+vendor

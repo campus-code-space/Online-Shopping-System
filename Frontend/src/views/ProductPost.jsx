@@ -38,38 +38,38 @@ export default function ProductPost() {
   });
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = getUserToken();
-    try {
-      let response = await axios({
-        url: 'http://localhost:8000/api/products',
-        data: productData,
-        method: 'post',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      console.log(JSON.stringify(response.data));
-      if (response.data.status) {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const token = getUserToken();
+  //   try {
+  //     let response = await axios({
+  //       url: 'http://localhost:8000/api/products',
+  //       data: productData,
+  //       method: 'post',
+  //       headers: { 'Authorization': `Bearer ${token}` }
+  //     });
+  //     console.log(JSON.stringify(response.data));
+  //     if (response.data.status) {
 
-        toast.success(`${response.data.message}`, {
-          position: "top-center", autoClose: 5000, hideProgressBar: false,
-          closeOnClick: false, pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
-        });
+  //       toast.success(`${response.data.message}`, {
+  //         position: "top-center", autoClose: 5000, hideProgressBar: false,
+  //         closeOnClick: false, pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
+  //       });
 
-        setTimeout(() => {
-          navigate('/vendor-management');
-        }, 1300);
+  //       setTimeout(() => {
+  //         navigate('/vendor-management');
+  //       }, 1300);
 
-      } else {
-        toast.error(`${response.data.message}`, {
-          position: "top-center", autoClose: 5000, hideProgressBar: false, closeOnClick: false,
-          pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
-        });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     } else {
+  //       toast.error(`${response.data.message}`, {
+  //         position: "top-center", autoClose: 5000, hideProgressBar: false, closeOnClick: false,
+  //         pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   const handleChange = (e) => {
 
     setProductData((prev) => {
@@ -78,23 +78,61 @@ export default function ProductPost() {
     });
 
   }
+
+
   const handleImageChange = async (e) => {
-    let file = e.target.files[0];
-    let image;
-    try {
-      image = await getBase64Img(file);
-      setImage(image);
-    } catch (e) {
-      console.log(e);
-    }
-    setProductData((prev) => {
-      const newData = {
-        ...prev,
-        productImage: image
-      };
-      return newData;
-    });
+  let file = e.target.files[0];
+  if (file) {
+    const formData = new FormData();
+    formData.append('productImage', file);
+    // Update productData with formData or handle separately
+    setProductData((prev) => ({
+      ...prev,
+      productImage: file.name, // Or keep as base64 if backend supports it
+    }));
+    setImage(URL.createObjectURL(file)); // Preview the image
   }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const token = getUserToken();
+  const formData = new FormData();
+  Object.keys(productData).forEach(key => {
+    formData.append(key, productData[key]);
+  });
+  try {
+    let response = await axios({
+      url: 'http://localhost:8000/api/products',
+      data: formData,
+      method: 'post',
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    console.log(JSON.stringify(response.data));
+    if (response.data.status) {
+      toast.success(`${response.data.message}`, {
+        position: "top-center", autoClose: 5000, hideProgressBar: false,
+        closeOnClick: false, pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
+      });
+      setTimeout(() => {
+        navigate('/vendor-management');
+      }, 1300);
+    } else {
+      toast.error(`${response.data.message}`, {
+        position: "top-center", autoClose: 5000, hideProgressBar: false, closeOnClick: false,
+        pauseOnHover: true, draggable: true, progress: undefined, theme: "light",
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+  
+
+  
   const handleToggleDiscount = () => {
     setToggleDiscount(!toggleDiscount);
   }

@@ -1,78 +1,65 @@
 import React, { useState } from 'react';
-import { ToastContainer ,toast} from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
-import { getUserRole } from '../auth/auth';
+
 export default function SignIn() {
-
-  const [userData, setUserData] = useState({
-    email: "",
-    password: "",
-  });
+  const [userData, setUserData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
-  const handleChange = (e) => {
 
-    setUserData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value }
-    })
-  }
+  const handleChange = (e) => {
+    setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // validate credentials here
     try {
-      let response = await axios.post('http://localhost:8000/api/login', userData);
-      console.log(response);
-      console.log(JSON.stringify(response.data));
+      const response = await axios.post('http://localhost:8000/api/login', userData);
       if (response.data.status) {
-
-        localStorage.setItem('userdata', `${JSON.stringify(response.data.data)}`);
-        toast.success(`${response.data.message}`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      let role = getUserRole();
-        setTimeout(() => {
-          //after 2 seconds navigate to dashboard
-          console.log('role is ',role);
-          switch(role){
-              case'User':
-              navigate('/dashboard');
-              break
+        localStorage.setItem('userdata', JSON.stringify(response.data.data));
+        if (response.data.data.otp_required) {
+          navigate('/otp-verification', { state: { email: userData.email } });
+        } else {
+          const role = response.data.data.role;
+          setTimeout(() => {
+            switch (role) {
+              case 'User':
+                navigate('/dashboard');
+                break;
               case 'Vendor':
-              navigate('/vendor-management');
-              break
+                navigate('/vendor-management');
+                break;
               default:
                 navigate('/');
-          }
-        }, 2000);
-
+            }
+          }, 2000);
+        }
+        toast.success(`${response.data.message}`, {
+          position: 'top-center',
+          autoClose: 5000,
+          theme: 'light',
+        });
       } else {
         toast.error(`${response.data.message}`, {
-          position: "top-center",
+          position: 'top-center',
           autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
+          theme: 'light',
         });
       }
     } catch (err) {
       console.log(err);
+      toast.error('An error occurred. Please try again.', {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'light',
+      });
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link to="/" className="flex items-center text-green-600 hover:text-green-700 mb-6 mx-4">
           <ArrowLeft className="h-5 w-5 mr-2" />
@@ -86,7 +73,6 @@ export default function SignIn() {
           </Link>
         </p>
       </div>
-
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -94,38 +80,32 @@ export default function SignIn() {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={userData.email}
-                  onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={userData.email}
+                onChange={handleChange}
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+              />
             </div>
-
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={userData.password}
-                  onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                />
-              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={userData.password}
+                onChange={handleChange}
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+              />
             </div>
-
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
@@ -138,14 +118,12 @@ export default function SignIn() {
                   Remember me
                 </label>
               </div>
-
               <div className="text-sm">
                 <a href="#" className="font-medium text-green-600 hover:text-green-500">
                   Forgot your password?
                 </a>
               </div>
             </div>
-
             <div>
               <button
                 type="submit"

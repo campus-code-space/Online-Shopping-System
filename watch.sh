@@ -6,7 +6,7 @@ composer install
 
 # Run migration and start the server initially
 php artisan migrate
-php artisan db:seed
+# php artisan db:seed
 php artisan serve --host=0.0.0.0 --port=8000 
 
 # # Monitor file changes inside the container

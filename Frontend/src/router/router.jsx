@@ -6,6 +6,8 @@ import {Home,SignIn,Register,DashboardLayout,DiscountPage,BulkSubscription,
 import ProductList from "../components/ProductList.jsx";
 import Profile from '../views/Profile.jsx'
 import PrivateRoute from "../auth/PrivateRoute";
+import OTPVerification from "../views/OTPVerification";
+
 
 const router = createBrowserRouter([
     {
@@ -20,6 +22,12 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup />
     },
+    {
+        path: "/otp-verification",
+        element: <OTPVerification />
+    },
+
+
     {
         path: '/vendor-management',
         element: <PrivateRoute Component={VendorPage} allowedRoles={['Vendor']} />,

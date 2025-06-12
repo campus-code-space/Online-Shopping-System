@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
+            // This ensures one cart per user at the database level.
+            $table->foreignId('customer_id')->unique()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

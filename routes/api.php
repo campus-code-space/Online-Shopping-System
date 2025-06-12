@@ -23,6 +23,9 @@ use App\Http\Controllers\API\SubscriptionController;
  Route::post('/login',[AuthController::class,'login']);
  Route::post('/verify', [AuthController::class, 'verifyAndCreateUser']);
  Route::post('/resendOtp', [AuthController::class, 'sendOtp']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
  
 Route::middleware(['auth:sanctum','ability:admin'])->group(function(){
@@ -81,7 +84,7 @@ Route::get('sub-categories', [SubCategoryController::class, 'index']);
 Route::get('sub-categories/{id}', [SubCategoryController::class, 'show']);
 
   
-Route::get('/order',function(){
-         return "This is some order for user";
+// Route::get('/order',function(){
+//          return "This is some order for user";
 
-})->middleware(['auth:sanctum','ability:User']);
+// })->middleware(['auth:sanctum','ability:User']);

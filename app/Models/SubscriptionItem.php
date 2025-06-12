@@ -14,16 +14,12 @@ class SubscriptionItem extends Model
     protected $fillable = [
         'quantity', 
         'subscription_id', 
-        'product_id'
+        'product_id',
+        'product_name',
     ];
 
     public function subscription()
     {
-        return $this->belongsTo(Subscription::class);
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Subscription::class,"subscription_id");
     }
 }

@@ -39,10 +39,6 @@ class Product extends Model
         return $this->hasMany(OrderItem::class, 'product_id');
     }
 
-    public function subscriptionItems()
-    {
-        return $this->hasMany(SubscriptionItem::class, 'product_id');
-    }
 
     public function cart_items()
     {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Product;
+use App\Models\UserSubscription;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,9 +50,9 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'customer_id');
     }
 
-    public function subscriptions()
+    public function user_subscriptions()
     {
-        return $this->hasMany(Subscription::class, 'customer_id');
+        return $this->hasMany(UserSubscription::class, 'customer_id');
     }
 
     /**

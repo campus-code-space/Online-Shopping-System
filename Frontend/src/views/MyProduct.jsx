@@ -7,6 +7,8 @@ function MyProduct() {
 
   const defaultData =new Array(10).fill(null);
 
+  console.log('data is ',data);
+
     if(isLoading){
       return (
         <div className='p-2 w-275 text-blue-700
@@ -19,7 +21,7 @@ function MyProduct() {
           )
       }
 
-      if(error){
+      if(error || data==undefined){
         return (<div>Something Went Wrong</div>)
     }
   

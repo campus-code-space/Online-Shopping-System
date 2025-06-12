@@ -30,6 +30,6 @@ class Subscription extends Model
 
     public function subscriptionItems()
     {
-        return $this->hasMany(SubscriptionItem::class,'subscription_items_id');
+        return $this->hasMany(SubscriptionItem::class,'subscription_id');
     }
 }

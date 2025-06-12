@@ -58,7 +58,11 @@ class ProductController extends Controller
 
         $user = Auth::user();
 
-        $products = Product::where('id',$user->id)->limit(6)->get();
+        $products = Product::where('vendor_id',$user->id)->limit(6)->get();
+        
+        // return response()->json([
+        //     'products' => Product::where('vendor_id',$user->id)->limit(6)->get()
+        // ]);
 
         return response()->json([
             'status'=>1,

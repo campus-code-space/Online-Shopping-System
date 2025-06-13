@@ -10,9 +10,39 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
     // List all products
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Product::with(['subCategory', 'vendor'])->get(), 200);
+        $query = Product::query();
+
+        // Search
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Category filter
+        if ($request->has('category_id') && !empty($request->category_id)) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Sub-category filter
+        if ($request->has('sub_category_id') && !empty($request->sub_category_id)) {
+            $query->where('sub_category_id', $request->sub_category_id);
+        }
+
+        // Price range filter
+        if ($request->has('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        if ($request->has('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        $products = $query->paginate(10);
+
+        return response()->json([
+            'product_list' => $products
+        ]);
     }
 
     // Store a new product

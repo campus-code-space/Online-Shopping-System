@@ -2,39 +2,34 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { getUserToken } from '../auth/auth';
 
-function UseFetch({url,method}) {
-
+function UseFetch({ url, method, params = {} }) {
     const token = getUserToken();
-    const [data,setData] = useState([]);
-    const [isLoading,setIsLoading] = useState(null);
-    const [error,setError] = useState(false);
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(null);
+    const [error, setError] = useState(false);
 
-    useEffect(()=>{
-        
-        const getData=async()=>{
-            try{
+    useEffect(() => {
+        const getData = async () => {
+            try {
                 setIsLoading(true);
-                let response = await axios({
-                    url: url,
-                    method: method,
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await axios({
+                    url,
+                    method,
+                    headers: { Authorization: `Bearer ${token}` },
+                    params
                 });
-                console.log('response is ',response.data);
-                console.log('response is ',response.data.product_list);
-                setData(response.data.product_list);
+                setData(response.data.product_list || response.data);
                 setIsLoading(false);
-
-            }catch(err){
+            } catch (err) {
                 console.log(err);
-                setError(err);  
+                setError(err);
                 setIsLoading(false);
             }
-        }
+        };
         getData();
-        },[]);
+    }, [url, method, JSON.stringify(params)]); // Watch for param changes
 
-
-  return {data,isLoading,error}
+    return { data, isLoading, error };
 }
 
 export default UseFetch
